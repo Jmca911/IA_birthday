@@ -1,0 +1,12 @@
+{
+  "name": "birthday-coach-site",
+  "version": "1.0.0",
+  "description": "NES-style birthday site for football coach",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 3000"
+  },
+  "keywords": ["birthday", "football", "coach", "nes", "retro"],
+  "author": "Birthday Team",
+  "license": "MIT"
+}

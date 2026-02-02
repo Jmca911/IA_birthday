@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ДЕНЬ РОЖДЕНИЯ ТРЕНЕРА!</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+        
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background: #0f380f;
+            color: #9bbc0f;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            font-size: 10px;
+        }
+        
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #9bbc0f;
+            border: 8px solid #0f380f;
+            box-shadow: 
+                0 0 0 8px #9bbc0f,
+                0 0 0 16px #0f380f,
+                0 0 40px rgba(155, 188, 15, 0.3);
+        }
+        
+        .game-screen {
+            background: #8bac0f;
+            border: 4px solid #0f380f;
+            padding: 20px;
+            margin: 10px 0;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0.8; }
+        }
+        
+        h1 {
+            font-size: 24px;
+            color: #0f380f;
+            text-shadow: 2px 2px 0 #9bbc0f;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+        }
+        
+        .pixel-border {
+            border: 4px solid #0f380f;
+            background: #8bac0f;
+            margin: 20px 0;
+            padding: 20px;
+            box-shadow: inset 0 0 0 2px #9bbc0f;
+        }
+        
+        .greeting-text {
+            font-size: 12px;
+            line-height: 2;
+            color: #0f380f;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .video-section {
+            margin: 30px 0;
+        }
+        
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border: 4px solid #0f380f;
+            background: #306230;
+        }
+        
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #306230 0%, #8bac0f 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: #9bbc0f;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .video-placeholder:hover {
+            background: linear-gradient(180deg, #8bac0f 0%, #306230 100%);
+            transform: scale(1.02);
+        }
+        
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .photo-frame {
+            position: relative;
+            border: 4px solid #0f380f;
+            background: #306230;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9bbc0f;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .photo-frame:hover {
+            transform: scale(1.05);
+            background: #8bac0f;
+            color: #0f380f;
+        }
+        
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            cursor: pointer;
+        }
+        
+        .modal img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 90%;
+            max-height: 90%;
+            border: 4px solid #9bbc0f;
+        }
+        
+        .photo-frame:hover {
+            transform: scale(1.05);
+            background: #8bac0f;
+            color: #0f380f;
+        }
+        
+        .football-field {
+            background: linear-gradient(90deg, 
+                #306230 0%, #306230 10%, 
+                #8bac0f 10%, #8bac0f 15%,
+                #306230 15%, #306230 85%,
+                #8bac0f 85%, #8bac0f 90%,
+                #306230 90%, #306230 100%
+            );
+            height: 60px;
+            margin: 20px 0;
+            border: 4px solid #0f380f;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ball {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #0f380f;
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: roll 3s infinite linear;
+        }
+        
+        @keyframes roll {
+            0% { left: -12px; }
+            100% { left: calc(100% + 12px); }
+        }
+        
+        .player {
+            position: absolute;
+            width: 16px;
+            height: 20px;
+            background: #0f380f;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .player.team1 { background: #556b2f; }
+        .player.team2 { background: #8b4513; }
+        
+        .trophy {
+            font-size: 30px;
+            text-align: center;
+            margin: 20px 0;
+            animation: bounce 1s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .button-nes {
+            background: #0f380f;
+            color: #9bbc0f;
+            border: none;
+            padding: 12px 20px;
+            font-size: 10px;
+            font-family: 'Press Start 2P', cursive;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 
+                4px 4px 0 #306230,
+                8px 8px 0 rgba(15, 56, 15, 0.3);
+            transition: all 0.1s ease;
+            margin: 10px;
+        }
+        
+        .button-nes:hover {
+            transform: translate(2px, 2px);
+            box-shadow: 
+                2px 2px 0 #306230,
+                4px 4px 0 rgba(15, 56, 15, 0.3);
+        }
+        
+        .button-nes:active {
+            transform: translate(4px, 4px);
+            box-shadow: none;
+        }
+        
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 15px;
+            background: #306230;
+            border: 4px solid #0f380f;
+        }
+        
+        .score {
+            text-align: center;
+        }
+        
+        .score-number {
+            font-size: 24px;
+            color: #9bbc0f;
+            margin-bottom: 5px;
+        }
+        
+        .score-label {
+            font-size: 8px;
+            color: #8bac0f;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+                border: 4px solid #0f380f;
+            }
+            
+            h1 {
+                font-size: 16px;
+            }
+            
+            .greeting-text {
+                font-size: 10px;
+            }
+            
+            .photos-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: #9bbc0f;
+            position: absolute;
+            animation: confetti-fall 2s infinite;
+            z-index: 999;
+        }
+        
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .level-up {
+            font-size: 14px;
+            text-align: center;
+            color: #0f380f;
+            margin: 20px 0;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="scanlines"></div>
+    
+    <div class="container">
+        <div class="game-screen">
+            <header class="header">
+                <h1>ДЕНЬ РОЖДЕНИЯ ТРЕНЕРА</h1>
+            </header>
+            
+            <div class="pixel-border">
+                <p class="greeting-text">
+                    НОВЫЙ УРОВЕНЬ! С ДНЁМ РОЖДЕНИЯ!<br><br>
+                    РЕЖИМ ТРЕНЕРА АКТИВИРОВАН<br>
+                    +999 ОЧКОВ ОПЫТА<br><br>
+                    РАЗБЛОКИРОВАНЫ СПОСОБНОСТИ:<br>
+                    ⚽ СУПЕР СТРАТЕГИЯ<br>
+                    🏆 МЫСЛИ ЧЕМПИОНА<br>
+                    ⭐ МОТИВАЦИЯ ИГРОКОВ МАКС<br>
+                    🎯 КОМБО ПОБЕДЫ x5<br><br>
+                    GAME OVER? НИКОГДА!<br>
+                    ТЫ ФИНАЛЬНЫЙ БОСС!
+                </p>
+            </div>
+            
+            <div class="score-board">
+                <div class="score">
+                    <div class="score-number">∞</div>
+                    <div class="score-label">ПОБЕДЫ</div>
+                </div>
+                <div class="score">
+                    <div class="score-number">0</div>
+                    <div class="score-label">ПОРАЖЕНИЯ</div>
+                </div>
+                <div class="score">
+                    <div class="score-number">100</div>
+                    <div class="score-label">УРОВЕНЬ</div>
+                </div>
+            </div>
+            
+            <div class="football-field">
+                <div class="ball"></div>
+                <div class="player team1" style="left: 20%;"></div>
+                <div class="player team2" style="left: 40%;"></div>
+                <div class="player team1" style="left: 60%;"></div>
+                <div class="player team2" style="left: 80%;"></div>
+            </div>
+            
+            <div class="level-up">
+                🏆 УРОВЕНЬ ПРОЙДЕН! 🏆
+            </div>
+            
+            <div class="video-section">
+                <div class="pixel-border">
+                    <div class="video-container">
+                        <div class="video-placeholder" id="videoPlaceholder">
+                            <div>▶</div>
+                            <div>ВИДЕО</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="photos-grid">
+                <div class="photo-frame" onclick="openModal('foto/1770051183.png')">
+                    <img src="foto/1770051183.png" alt="Фото 1">
+                </div>
+                <div class="photo-frame" onclick="openModal('foto/1770051298.png')">
+                    <img src="foto/1770051298.png" alt="Фото 2">
+                </div>
+                <div class="photo-frame" onclick="openModal('foto/1770051379.png')">
+                    <img src="foto/1770051379.png" alt="Фото 3">
+                </div>
+                <div class="photo-frame" onclick="openModal('foto/1770051428.png')">
+                    <img src="foto/1770051428.png" alt="Фото 4">
+                </div>
+            </div>
+            
+            <div class="trophy">🏆</div>
+            
+            <!-- Модальное окно для увеличения фото -->
+            <div id="imageModal" class="modal" onclick="closeModal()">
+                <img id="modalImage" src="" alt="Увеличенное фото">
+            </div>
+            
+            <div style="text-align: center;">
+                <button class="button-nes" onclick="playSound()">🎵 МУЗЫКА</button>
+                <button class="button-nes" onclick="addConfetti()">🎊 ВЕСЕЛЬЕ</button>
+                <button class="button-nes" onclick="startGame()">▶ ИГРАТЬ</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let isPlaying = false;
+        let autoPlayed = false;
+        
+        function playHappyBirthday() {
+            if (isPlaying) return;
+            isPlaying = true;
+            
+            // Создаем 8-битную мелодию Happy Birthday
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            
+            const notes = [
+                261.63, 261.63, 293.66, 261.63, 349.23, 329.63,
+                261.63, 261.63, 293.66, 261.63, 392.00, 349.23,
+                261.63, 261.63, 523.25, 440.00, 349.23, 329.63, 293.66,
+                466.16, 466.16, 440.00, 349.23, 392.00, 349.23
+            ];
+            
+            const durations = [
+                0.25, 0.25, 0.5, 0.5, 0.5, 1,
+                0.25, 0.25, 0.5, 0.5, 0.5, 1,
+                0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5,
+                0.25, 0.25, 0.5, 0.5, 0.5, 1
+            ];
+            
+            let currentTime = audioContext.currentTime;
+            
+            notes.forEach((frequency, index) => {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.type = 'square';
+                oscillator.frequency.value = frequency;
+                
+                gainNode.gain.setValueAtTime(0.1, currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, currentTime + durations[index]);
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.start(currentTime);
+                oscillator.stop(currentTime + durations[index]);
+                
+                currentTime += durations[index] * 0.9;
+            });
+            
+            // Блокируем кнопку на время воспроизведения
+            setTimeout(() => {
+                isPlaying = false;
+            }, 8000);
+        }
+        
+        function playSound() {
+            playHappyBirthday();
+        }
+        
+        function addConfetti() {
+            const colors = ['#9bbc0f', '#8bac0f', '#306230', '#0f380f'];
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 2 + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 2000);
+                }, i * 100);
+            }
+        }
+        
+        function startGame() {
+            alert('🎮 ФУТБОЛЬНАЯ ИГРА НАЧАТА!');
+            addConfetti();
+        }
+        
+        document.getElementById('videoPlaceholder').addEventListener('click', function() {
+            const videoContainer = document.querySelector('.video-container');
+            videoContainer.innerHTML = `
+                <div style="padding: 20px; text-align: center; color: #9bbc0f; height: 100%; display: flex; flex-direction: column; justify-content: center;">
+                    <div style="font-size: 24px; margin-bottom: 20px;">📹</div>
+                    <div style="font-size: 12px; line-height: 1.5;">
+                        Для просмотра видео<br>
+                        откройте сайт через веб-сервер<br><br>
+                        или просто посмотрите<br>
+                        файл вручную:<br>
+                        foto/ef34a039-6f76-46a8-823c-ccb511928ff8.mp4
+                    </div>
+                </div>
+            `;
+        });
+        
+        function openModal(imageSrc) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modal.style.display = 'block';
+            modalImg.src = imageSrc;
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.style.display = 'none';
+        }
+        
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                addConfetti();
+                // Автовоспроизведение музыки через 2 секунды
+                if (!autoPlayed) {
+                    setTimeout(() => {
+                        playHappyBirthday();
+                        autoPlayed = true;
+                    }, 2000);
+                }
+            }, 500);
+        });
+        
+        // Добавляем обработчик первого клика для автоплея
+        document.addEventListener('click', function firstClickHandler() {
+            if (!autoPlayed) {
+                playHappyBirthday();
+                autoPlayed = true;
+                document.removeEventListener('click', firstClickHandler);
+            }
+        }, { once: true });
+        
+        // Закрытие модального окна по ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
